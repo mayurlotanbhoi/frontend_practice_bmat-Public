@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../features/auth/authSlice';
 import { useAppDispatch } from '../hooks/useAppDispatch';
+import axiosInstance from '../axios/service';
 
 const GoogleLogin:React.FC = () => {
 
@@ -31,20 +32,37 @@ const GoogleLogin:React.FC = () => {
     );
   }, []);
 
-  const handleCallback = async (response) => {
-    const { credential } = response; // JWT token from Google
-    const res = await fetch('http://localhost:5000/auth/google-login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: credential }),
-    });
+//   const handleCallback = async (response) => {
+//     const { credential } = response; // JWT token from Google
+//     //   const res = await axiosInstance.post('/auth/google-login', { token: credential });
 
-    const data = await res.json();
-        handleLogin(data);
+//     //   console.log('res', res);
 
-    // 
-    console.log('User logged in:', data);
-  };
+//     const res = await fetch('http://localhost:5000/auth/google-login', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ token: credential }),
+//     });
+
+//     const data = await res.json();
+//         handleLogin(res);
+
+//     // 
+//     console.log('User logged in:', data);
+//   };
+
+
+const handleCallback = async (response) => {
+  const { credential } = response;
+
+  try {
+    const res = await axiosInstance.post('/auth/google-login', { token: credential });
+    handleLogin(res?.data);
+    console.log('User logged in:', res?.data);
+  } catch (err) {
+    console.error('Google login failed via axios:', err.response?.data || err.message);
+  }
+};
 
   return <div id="google-signin"></div>;
 };

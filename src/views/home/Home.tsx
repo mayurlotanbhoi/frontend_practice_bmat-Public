@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default function Home() {
+     
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-200 px-4 py-10">
       <div className="bg-white shadow-xl rounded-2xl p-10 max-w-3xl w-full text-center animate-fade-in">
