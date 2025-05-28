@@ -29,11 +29,12 @@ export default defineConfig({
         ],
       },
       devOptions: {
-        enabled: true, // Enable for dev testing
+        enabled: false, // Enable for dev testing
         type: 'module',
       },
     }),
   ],
+  root: '.',
   test: {
     globals: true,  // Ensures you can use global functions like `expect` without imports
     environment: 'jsdom', // Use jsdom environment to simulate the browser

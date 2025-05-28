@@ -4,6 +4,7 @@
 import  { useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import GoogleLogin from "./componets/GoogleLogin";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAzeRY7RYox42t6Cpy33TQRmzTmlxt8lKo",
@@ -57,7 +58,7 @@ function App() {
     // Optional: listen for foreground messages
     onMessage(messaging, (payload) => {
       console.log("Message received. ", payload);
-      alert(`Push notification: ${payload.notification?.title} - ${payload.notification?.body}`);
+      // alert(`Push notification: ${payload.notification?.title} - ${payload.notification?.body}`);
     });
   }, []);
 
@@ -70,7 +71,10 @@ function App() {
     });
 }
 
-  return <div>Firebase Push Notification Demo</div>;
+  return <div>
+  Firebase Push Notification Demo
+  <GoogleLogin/>
+  </div>;
 }
 
 export default App;

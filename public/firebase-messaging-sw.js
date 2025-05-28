@@ -17,39 +17,59 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 
-messaging.onBackgroundMessage(payload => {
-  console.log('[SW] Received background message:', payload);
+// messaging.onBackgroundMessage(payload => {
+//   console.log('[SW] Received background message:', payload);
 
-  const {
-    title = 'Notification',
-    body = 'You have a new message.',
-    imageUrl,
-    icon = '/icons/icon-192x192.png',
-    badge = '/icons/badge-icon.png',
-    url = '/',
-  } = payload.data || {};
+//   const {
+//     title = 'Notification',
+//     body = 'You have a new message.',
+//     imageUrl,
+//     icon = '/icons/icon-192x192.png',
+//     badge = '/icons/badge-icon.png',
+//     url = '/',
+//   } = payload.data || {};
 
-  const notificationOptions = {
-    body,
-    icon,
-    badge,
-    image: imageUrl,
-    data: { click_action_url: url },
-    actions: [
-      {
-        action: 'open',
-        title: 'Open App',
-        icon: '/icons/open-icon.png'
-      },
-      {
-        action: 'dismiss',
-        title: 'Dismiss',
-        icon: '/icons/close-icon.png'
-      }
-    ]
+//   const notificationOptions = {
+//     body,
+//     icon,
+//     badge,
+//     image: imageUrl,
+//     data: { click_action_url: url },
+//     actions: [
+//       {
+//         action: 'open',
+//         title: 'Open App',
+//         icon: '/icons/open-icon.png'
+//       },
+//       {
+//         action: 'dismiss',
+//         title: 'Dismiss',
+//         icon: '/icons/close-icon.png'
+//       }
+//     ]
+//   };
+
+//   self.registration.showNotification(title, notificationOptions);
+// });
+
+self.addEventListener('push', function (event) {
+  if (!event.data) return;
+
+  const payload = event.data.json();
+  const data = payload.data || {};
+
+  console.log('[SW] Received background message:', data);
+
+  const title = data.title || 'Default Title';
+  const options = {
+    body: data.body || '',
+    icon: data.imageUrl || '/icon.png',
+    data: {
+      url: data.url || '/',
+    }
   };
 
-  self.registration.showNotification(title, notificationOptions);
+  event.waitUntil(self.registration.showNotification(title, options));
 });
 
 // Handle click on notification
